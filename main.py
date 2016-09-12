@@ -46,15 +46,24 @@ class NewPost(Handler):
             t = jinja_env.get_template("newpost.html")
             response = t.render(title=post_title, body=post_body, error=error)
             self.response.write(response)
-        # store the post inthe database and redirect home
+        # store the post inthe database and redirect to the post
         else:
             p = Postsdb(title = post_title, body = post_body)
             p.put()
-            self.redirect("/")
+            self.redirect("/blog/" + str(p.key().id()))
+
+class ViewPostHandler(webapp2.RequestHandler):
+    def get(self, id):
+        blog_posts = Postsdb.get_by_id(int(id))
+
+        t = jinja_env.get_template("singlepost.html")
+        response = t.render(posts = blog_posts)
+        self.response.write(response)
 
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/blog', Blog),
-    ('/newpost', NewPost)
+    ('/newpost', NewPost),
+    webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
 ], debug=True)

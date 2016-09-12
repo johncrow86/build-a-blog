@@ -1,10 +1,43 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Build-a-Blog</title>
+      <title>Build-a-Blog</title>
     </head>
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+        width: 800px;
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .error {
+        color: red;
+      }
+      #mainlink {
+        font-size: 40px;
+        font-family: fantasy;
+        text-align: right;
+      }
+      #addapost {
+        font-size: 12px;
+        font-family: cursive;
+        margin: 10px;
+        text-align: right;
+      }
+      label {
+        display: block;
+        font-size: 20px;
+      }
+      textarea {
+        font-size: 18px;
+        padding: 2px;
+      }
+      .title {
+        font-size: 30px;
+      }
+    </style>
     <body>
-      <h1><a href="/">this is the blog!</a></h1>
+      <div id="mainlink"><a href="/">this is the blog!</a></div>
 
       {% block content %}
       {% endblock %}
