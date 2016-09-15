@@ -7,4 +7,14 @@
     <div class="body">{{p.body}}</div><br>
   {% endfor %}
 
+  <input type="hidden" name="page" value={{page}}>
+
+  {% if page != 1 %}
+    <div id="lastarrow"><a href="/blog?page={{page-1}}">&lsaquo;last</a></div>
+  {% endif %}
+
+  {% if count > 5 %}
+    <div id="nextarrow"><a href="/blog?page={{page+1}}">next&rsaquo;</a></div>
+  {% endif %}
+
 {% endblock %}

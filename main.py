@@ -7,6 +7,9 @@ from google.appengine.ext import db
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
+def get_posts(limit, offset):
+    return db.GqlQuery("SELECT * FROM Postsdb order by created desc limit %s offset %s" % (limit, offset))
+
 class Handler(webapp2.RequestHandler):
 
     def renderError(self, error_code):
@@ -24,10 +27,19 @@ class MainHandler(Handler):
 
 class Blog(Handler):
     def get(self):
-        blog_posts = db.GqlQuery("SELECT * FROM Postsdb order by created desc limit 5")
+        page = 1
+        if self.request.get("page"):
+            page = int(self.request.get("page"))
+            offset_value = (page - 1) * 5
+            blog_posts = get_posts(5, offset_value)
+        else:
+            offset_value = 0
+            blog_posts = get_posts(5, offset_value)
+
+        count = blog_posts.count(offset=offset_value)
 
         t = jinja_env.get_template("blog.html")
-        response = t.render(posts = blog_posts)
+        response = t.render(posts=blog_posts, count=count, page=page)
         self.response.write(response)
 
 class NewPost(Handler):
